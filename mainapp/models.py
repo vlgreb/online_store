@@ -119,6 +119,6 @@ class Customer(models.Model):
         return r'Покупатель: {self.user.first_name} {self.user.last_name}'
 
 
-# 1:23:40
+
 
 
