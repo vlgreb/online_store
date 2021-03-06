@@ -5,7 +5,33 @@ from django.contrib.contenttypes.fields import GenericForeignKey
 
 User = get_user_model()
 
+
+class LatestProductsManager:
+
+    @staticmethod
+    def get_products_for_main_page(*args, **kwargs):
+        with_respect_to = kwargs.get('with_recpect_to')
+        products = []
+        ct_models = ContentType.objects.filter(model__in=args)
+        for ct_model in ct_models:
+            model_products = ct_model.model_class()._base_manager.all().order_by('-id')[:5]
+            products.extend(model_products)
+        if with_respect_to:
+            ct_model = ContentType.objects.filter(model=with_respect_to)
+            if ct_model.exists():
+                if with_respect_to in args:
+                    return sorted(
+                        products, key=lambda x: x.__class__.meta.model_name.startswith(with_respect_to), reverse=True
+                        )
+        return products
+
+
+class LatestProducts:
+
+    objects = LatestProductsManager()
+
 # Create your models here.
+
 
 class Category(models.Model):
     name = models.CharField(max_length=255, verbose_name='Имя категории')
@@ -13,6 +39,7 @@ class Category(models.Model):
 
     def __str__(self):
         return self.name
+
 
 class Product(models.Model):
 
@@ -28,6 +55,7 @@ class Product(models.Model):
 
     def __str__(self):
         return self.title
+
 
 class Notebook(Product):
     diagonal = models.CharField(max_length=255, verbose_name='Диагональ')
@@ -69,6 +97,7 @@ class CartProduct(models.Model):
     def __str__(self):
         return f'Продукт: {self.product.title} (для корзины)'
 
+
 class Cart(models.Model):
 
     owner = models.ForeignKey('Customer', verbose_name='Владелец', on_delete=models.CASCADE)
@@ -89,5 +118,7 @@ class Customer(models.Model):
     def __str__(self):
         return r'Покупатель: {self.user.first_name} {self.user.last_name}'
 
+
+# 1:23:40
 
 
