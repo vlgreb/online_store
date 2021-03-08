@@ -7,17 +7,17 @@ from .models import *
 from PIL import Image
 
 
-class NotebookAdminForm(ModelForm):
-
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.fields['image'].help_text = mark_safe(
-            """<span style="color:red; font-size: 14px;">При загрузке изображения больше {}*{} оно будет обрезано</span>
-            """.format(
-                *Product.MAX_RESOLUTION
-            )
-        )
+# class NotebookAdminForm(ModelForm):
+#
+#
+#     def __init__(self, *args, **kwargs):
+#         super().__init__(*args, **kwargs)
+#         self.fields['image'].help_text = mark_safe(
+#             """<span style="color:red; font-size: 14px;">При загрузке изображения больше {}*{} оно будет обрезано</span>
+#             """.format(
+#                 *Product.MAX_RESOLUTION
+#             )
+#         )
 
     # def clean_image(self):
     #     image = self.cleaned_data['image']
@@ -37,7 +37,7 @@ class NotebookAdminForm(ModelForm):
 
 class NotebookAdmin(admin.ModelAdmin):
 
-    form = NotebookAdminForm
+    # form = NotebookAdminForm
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == 'category':
