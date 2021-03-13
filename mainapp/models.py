@@ -69,7 +69,7 @@ class CategoryManager(models.Manager):
         models = get_models_for_count('notebook', 'smartphone')
         qs = list(self.get_queryset().annotate(*models))
         data = [
-            dict(name= c.name, url=c.get_absolute_url(), count=getattr(c, self.CATEGORY_NAME_COUNT_NAME[c.name]))
+            dict(name=c.name, url=c.get_absolute_url(), count=getattr(c, self.CATEGORY_NAME_COUNT_NAME[c.name]))
             for c in qs
         ]
         return data
