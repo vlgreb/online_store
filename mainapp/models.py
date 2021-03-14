@@ -184,6 +184,9 @@ class CartProduct(models.Model):
     def __str__(self):
         return f'Продукт: {self.content_object.title} (для корзины)'
 
+    def save(self, *args, **kwargs):
+        self.final_price = self.qty * self.content_object.price
+        super().save(*args, **kwargs)
 
 class Cart(models.Model):
 
