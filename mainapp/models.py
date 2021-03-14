@@ -107,6 +107,9 @@ class Product(models.Model):
     def __str__(self):
         return self.title
 
+    def get_model_name(self):
+        return self.__class__.__name__.lower()
+
     # def save(self, *args, **kwargs):
     #     # image = self.image
     #     # img = Image.open(image)
@@ -164,6 +167,7 @@ class Smartphone(Product):
     def get_absolute_url(self):
         return get_product_url(self, 'product_detail')
 
+
     # @property
     # def sd(self):
     #     if self.sd:
@@ -203,7 +207,6 @@ class Cart(models.Model):
 
     def save(self, *args, **kwargs):
         cart_data = self.products.aggregate(models.Sum('final_price'), models.Count('id'))
-        print(cart_data)
         if cart_data.get('final_price__sum'):
             self.final_price = cart_data['final_price__sum']
         else:
@@ -220,3 +223,4 @@ class Customer(models.Model):
 
     def __str__(self):
         return r'Покупатель: {self.user.first_name} {self.user.last_name}'
+
